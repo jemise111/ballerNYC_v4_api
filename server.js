@@ -1,6 +1,7 @@
 var express = require('express');
 var config = require('./config');
 var db = require('./db/db');
+var formatter = require('./helpers/dataFormatter');
 
 // setup
 
@@ -16,29 +17,21 @@ app.use(function(req, res, next) {
 });
 
 app.get('/courts', function(req, res){
-  var courts = db.getCollectionData('courts', function(data){
-    var formattedData = formatCourtsData(data);
-    res.json(formattedData);
+  var options = formatter.formatQueryIntoOptions(req.query);
+  var courts = db.getCollectionData('courts', options, function(data){
+    res.json(data);
   });
 });
 
-// helper
+app.get('/', function(req, res){
+  var courts = db.getCollectionData('courts', function(data){
+    res.send('Successfully connected');
+  });
+});
 
-function formatCourtsData(courts) {
-  var data = {
-    courts: {},
-    boroughs: []
-  };
-  for (var i = 0; i < courts.length; i++) {
-    var borough = courts[i].borough;
-    if (data.boroughs.indexOf(borough) === -1) {
-      data.courts[courts[i].borough] = [];
-      data.boroughs.push(borough);
-    }
-    data.courts[borough].push(courts[i]);
-  }
-  return data;
-}
+app.use(function(req, res) {
+   res.send('404: Page not Found', 404);
+});
 
 // start the server
 

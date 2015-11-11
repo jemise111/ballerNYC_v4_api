@@ -26,14 +26,13 @@ function getJSON(xmlString) {
 
 function format(array) {
   return array.map(function(obj){
+    var result = {};
     for (var k in obj) {
-      if (obj.hasOwnProperty(k)){
-        obj[k] = obj[k][0];
-      }
+      result[k.toLowerCase()] = obj[k][0];
     }
-    obj.borough = boroughMap[obj.Prop_ID[0]];
-    return obj;
-  })
+    result.borough = boroughMap[result.prop_id[0]];
+    return result;
+  });
 }
 
 function runSeed(courtsArray) {

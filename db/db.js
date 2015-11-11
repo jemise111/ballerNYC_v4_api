@@ -3,7 +3,7 @@ var config = require('../config');
 
 var database;
 
-module.exports.connect = function(cb, close) {
+module.exports.connect = function(cb) {
   if (database) {
     if (cb) { cb(database); }
   } else {
@@ -32,14 +32,17 @@ module.exports.validateAddCourts = function(courtsArray) {
   });
 }
 
-module.exports.getCollectionData = function(name, query, cb) {
-  if (typeof query === 'function') {
-    cb = query;
-    query = {};
+module.exports.getCollectionData = function(name, options, cb) {
+  if (typeof options === 'function') {
+    cb = options;
+    options = {};
   }
   this.connect(function(db){
     var collection = db.collection(name);
-    collection.find(query).toArray(function(err, docs) {
+    collection.find(options.query)
+    .skip(options.skip)
+    .limit(options.limit)
+    .toArray(function(err, docs) {
       cb(docs);
     });
   });
