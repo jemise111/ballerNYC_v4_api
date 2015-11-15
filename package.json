@@ -3,6 +3,7 @@
   "main": "server.js",
   "version": "0.0.1",
   "dependencies": {
+    "cors": "^2.7.1",
     "express": "~4.0.0",
     "mongodb": "~1.4.3",
     "xml2js": "~0.4.5"
