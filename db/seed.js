@@ -25,14 +25,28 @@ function getJSON(xmlString) {
 }
 
 function format(array) {
-  return array.map(function(obj){
-    var result = {};
-    for (var k in obj) {
-      result[k.toLowerCase()] = obj[k][0];
+  var result = [];
+  for (var i = 0; i < array.length; i++) {
+    var thisObj = {};
+
+    for (var k in array[i]) {
+      // downcase all property names and remove arrays
+      thisObj[k.toLowerCase()] = array[i][k][0];
     }
-    result.borough = boroughMap[result.prop_id[0]];
-    return result;
-  });
+
+    if (thisObj.lat.length && thisObj.lon.length) {
+      // add borough property
+      thisObj.borough = boroughMap[thisObj.prop_id[0]];
+      // add mongo geospacial property
+      thisObj.loc = {
+        type: 'Point',
+        coordinates: [parseFloat(thisObj.lon), parseFloat(thisObj.lat)]
+      }
+
+      result.push(thisObj);
+    }
+  }
+  return result;
 }
 
 function runSeed(courtsArray) {

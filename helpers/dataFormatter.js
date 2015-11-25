@@ -19,6 +19,22 @@ module.exports = {
 	  return result;
 	},
 
+	formatLatLonIntoOptions: function(lat, lon, distance) {
+		return {
+			query: {
+			  loc: {
+			    $near: {
+			      $geometry: {
+			        type: 'Point',
+			        coordinates: [lon, lat]
+			      },
+			      $maxDistance: distance
+			    }
+			  }
+			}
+		};
+	},
+
 	// not using
 	formatCourtsData: function(courts) {
 	  var data = {

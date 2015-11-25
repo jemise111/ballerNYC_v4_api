@@ -14,10 +14,12 @@ module.exports.connect = function(cb) {
   }
 }
 
-module.exports.addToCollection = function(name, objOrArray) {
+module.exports.addToCollection = function(name, arrayOfObjs) {
   this.connect(function(db){
     var collection = db.collection(name);
-    collection.insert(objOrArray, function(){});
+    arrayOfObjs.map(function(o) {
+      collection.insert(o, function(){});
+    });
   });
 }
 

@@ -1,3 +1,4 @@
+var https = require('https');
 var express = require('express');
 var cors = require('cors');
 var config = require('./config');
@@ -11,6 +12,32 @@ var port = process.env.PORT || config.port;
 app.use(cors());
 
 // routes
+
+app.get('/search', function(mainRequest, mainResponse){
+	var address = mainRequest.query.address;
+	var geocodeUrl = config.geocode.url + '&address=' + address;
+	https.get(geocodeUrl, function(googleResponse) {
+		var body = '';
+    googleResponse.on('data', function(chunk){
+        body += chunk;
+    });
+    googleResponse.on('end', function(){
+    	var responseBody = JSON.parse(body);
+    	if (responseBody.results.length) {
+    		var lat = responseBody.results[0].geometry.location.lat;
+    		var lon = responseBody.results[0].geometry.location.lng;
+				var maxDistance = 500;
+				var options = formatter.formatLatLonIntoOptions(lat, lon, maxDistance);
+
+			  var courts = db.getCollectionData('courts', options, function(data){
+			    mainResponse.json(data);
+			  });
+    	} else {
+    		mainResponse.json({message: 'No results found'});
+    	}
+    });
+	});
+});
 
 app.get('/courts', function(req, res){
   var options = formatter.formatQueryIntoOptions(req.query);

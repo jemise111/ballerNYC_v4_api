@@ -9,5 +9,8 @@ module.exports = {
   seed: {
     dataUrl: 'http://www.nycgovparks.org/bigapps/DPR_Basketball_001.xml',
     dataType: 'xml'
+  },
+  geocode: {
+    url: 'https://maps.googleapis.com/maps/api/geocode/json?key='+process.env.GOOGLE_GEOCODE_KEY
   }
 }
