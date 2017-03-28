@@ -1,6 +1,7 @@
 module.exports = {
   db: {
-    url: 'mongodb://'+process.env.MONGOLAB_USERNAME+':'+process.env.MONGOLAB_PASSWORD+'@ds053784.mongolab.com:53784/ballernyc'
+    // url: 'mongodb://'+process.env.MONGOLAB_USERNAME+':'+process.env.MONGOLAB_PASSWORD+'@ds053784.mongolab.com:53784/ballernyc'
+    url: 'mongodb://'+process.env.MONGOLAB_USERNAME+':'+process.env.MONGOLAB_PASSWORD+'@ds129469.mlab.com:29469/newballernyc'
   },
   server: {
     baseUrl: '/api',

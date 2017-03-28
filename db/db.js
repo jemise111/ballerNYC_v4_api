@@ -42,8 +42,8 @@ module.exports.getCollectionData = function(name, options, cb) {
   this.connect(function(db){
     var collection = db.collection(name);
     collection.find(options.query)
-    .skip(options.skip)
-    .limit(options.limit)
+    .skip(options.skip || 0)
+    .limit(options.limit || 0)
     .toArray(function(err, docs) {
       cb(docs);
     });
